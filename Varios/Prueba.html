@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      .diagram-container {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .diagram {
+        display: block;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="diagram-container">
+      <pre class="mermaid">
+        graph LR
+        A ---|Texto 1| B
+        B-->|Texto 2| C[fa:fa-ban forbidden]
+        B-->|Texto 3| D(fa:fa-spinner);
+        style A,B,C,D fill:#FFA500,stroke:#ffffff,stroke-width:2px
+        style A,B,C,D text:#008000,stroke:#ffffff,stroke-width:2px
+      </pre>
+
+      <pre class="mermaid">
+        graph TD
+        A -->|Texto 1| B
+        B -->|Texto 2| C
+        C -->|Texto 3| D
+        style A,B,C,D fill:#FFA500,stroke:#ffffff,stroke-width:2px
+        style A,B,C,D text:#008000,stroke:#ffffff,stroke-width:2px
+      </pre>
+
+      <pre class="mermaid">
+        graph TD
+        A -->|Texto 1| B
+        B -->|Texto 2| C
+        C -->|Texto 3| D
+        style A,B,C,D fill:#FFA500,stroke:#ffffff,stroke-width:2px
+        style A,B,C,D text:#008000,stroke:#ffffff,stroke-width:2px
+      </pre>
+
+      <pre class="mermaid">
+        graph TD
+        A -->|Texto 1| B
+        B -->|Texto 2| C
+        C -->|Texto 3| D
+        style A,B,C,D fill:#FFA500,stroke:#ffffff,stroke-width:2px
+        style A,B,C,D text:#008000,stroke:#ffffff,stroke-width:2px
+      </pre>
+
+      <pre class="mermaid">
+        graph TD
+        A -->|Texto 1| B
+        B -->|Texto 2| C
+        C -->|Texto 3| D
+        style A,B,C,D fill:#FFA500,stroke:#ffffff,stroke-width:2px
+        style A,B,C,D text:#008000,stroke:#ffffff,stroke-width:2px
+      </pre>
+    </div>
+
+    <!-- Tabla -->
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Encabezado 1</th>
+          <th>Encabezado 2</th>
+          <th>Encabezado 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dato 1</td>
+          <td>Dato 2</td>
+          <td>Dato 3</td>
+        </tr>
+        <tr>
+          <td>Dato 4</td>
+          <td>Dato 5</td>
+          <td>Dato 6</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Reloj -->
+    <div id="clock"></div>
+
+    <!-- Contador hasta el 20 de diciembre de 2023, 10 am -->
+    <div id="countdown"></div>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+
+      function toggleDiagram(diagramId) {
+        const diagram = document.getElementById(diagramId);
+        diagram.classList.toggle('hidden');
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+      }
+
+      function updateCountdown() {
+        const targetDate = new Date('December 20, 2023 10:00:00 GMT-05:00');
+        const now = new Date();
+
+        const timeDifference = targetDate - now;
+        const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById('countdown').innerText = `Faltan: ${days} días, ${hours} horas, ${minutes} minutos`;
+      }
+
+      // Actualizar el reloj cada segundo
+      setInterval(updateClock, 1000);
+
+      // Actualizar el contador cada minuto
+      setInterval(updateCountdown, 60000);
+
+      // Inicializar el reloj y el contador al cargar la página
+      updateClock();
+      updateCountdown();
+    </script>
+  </body>
+</html>
+
+ <button class="btn btn-success" onclick=" window.open('http://google.com','_blank')"> Google</button>
