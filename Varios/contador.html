@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .countdown-container {
+      text-align: center;
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown-container">
+    <!-- Contador hasta la fecha de examen-->
+    <div id="countdown"></div>
+  </div>
+
+  <script>
+    function updateCountdown() {
+      const targetDate = new Date('June 20, 2024 12:25:00 GMT-06:00');
+      const now = new Date();
+
+      const timeDifference = targetDate - now;
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+      document.getElementById('countdown').innerText = `Examen en: ${days} días, ${hours} horas, ${minutes} minutos`;
+    }
+
+    // Actualizar el contador cada minuto
+    setInterval(updateCountdown, 60000);
+
+    // Inicializar el contador al cargar la página
+    updateCountdown();
+  </script>
+</body>
+</html>

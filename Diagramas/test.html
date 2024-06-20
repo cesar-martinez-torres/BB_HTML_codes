@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diagrama de Mermaid Vertical Centrado</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .diagram-container {
+      text-align: center;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 80%;
+    }
+  </style>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <h1></h1>
+  <div class="diagram-container">
+    <pre class="mermaid">
+      graph TB;
+        A-->B;
+        A-->C;
+        B-->D;
+        C-->D;
+        E-->F;
+        G-->H;
+        I-->J;
+    </pre>
+  </div>
+</body>
+</html>

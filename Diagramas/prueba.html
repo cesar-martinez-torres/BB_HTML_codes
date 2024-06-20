@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Curso de Robótica</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+</head>
+<body>
+  <h1></h1>
+  <div style="max-width: 90%; margin: 0 auto;">
+    <div class="mermaid" style="max-width: 100%; height: auto;">
+      graph TB;
+        A[Intro] --> B[Introducción a la robótica];
+        B --> |texto en la flecha| C{Componentes básicos};
+        C --> D(Motores
+        y
+        sensores);
+        C --> E[Programación básica];
+        E --> F[Proyectos simples];
+        B --> G[Robótica avanzada];
+        G --> H[Visión artificial];
+        G --> I[Robótica móvil];
+        I --> J[Algoritmos de navegación];
+        G --> K[Control de robots];
+        style A fill:#f9f,stroke:#333,stroke-width:4px
+        style B fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
+    </div>
+  </div>
+</body>
+</html>

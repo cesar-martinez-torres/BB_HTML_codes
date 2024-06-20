@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Interactivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+        .quiz-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        .answer-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            max-width: 400px;
+            margin: 5px 0;
+        }
+        .answer-btn:hover {
+            background-color: #0056b3;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .navigation {
+            margin-top: 20px;
+        }
+        .navigation button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        .navigation button:hover {
+            background-color: #218838;
+        }
+        .summary {
+            display: none;
+            text-align: left;
+        }
+        .summary h2 {
+            margin-bottom: 20px;
+        }
+        .summary-item {
+            margin-bottom: 20px;
+        }
+        .summary-item p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Cuestionario de Opción Múltiple</h1>
+        <div id="question-container">
+            <p id="question"></p>
+            <ul id="answers-list"></ul>
+        </div>
+        <p id="feedback" class="feedback"></p>
+        <div class="navigation">
+            <button id="prev-btn" onclick="prevQuestion()">Anterior</button>
+            <button id="next-btn" onclick="nextQuestion()">Siguiente</button>
+            <button id="summary-btn" onclick="showSummary()">Resumen</button>
+        </div>
+        <div id="summary" class="summary">
+            <h2>Resumen del Cuestionario</h2>
+            <div id="summary-list"></div>
+            <p id="score"></p>
+        </div>
+    </div>
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es la capital de Francia?",
+                answers: ["Berlín", "Madrid", "París", "Roma"],
+                correct: 2
+            },
+            {
+                question: "¿Cuál es el elemento químico con símbolo O?",
+                answers: ["Oxígeno", "Oro", "Osmio", "Oganesón"],
+                correct: 0
+            },
+            {
+                question: "¿Quién escribió 'Cien años de soledad'?",
+                answers: ["Mario Vargas Llosa", "Gabriel García Márquez", "Julio Cortázar", "Pablo Neruda"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál es el planeta más cercano al Sol?",
+                answers: ["Venus", "Tierra", "Marte", "Mercurio"],
+                correct: 3
+            },
+            {
+                question: "¿Qué órgano del cuerpo humano produce insulina?",
+                answers: ["Hígado", "Páncreas", "Riñones", "Estómago"],
+                correct: 1
+            },
+            {
+                question: "¿Cuál es la moneda oficial de Japón?",
+                answers: ["Yen", "Dólar", "Euro", "Won"],
+                correct: 0
+            },
+            {
+                question: "¿Quién pintó la Mona Lisa?",
+                answers: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+                correct: 2
+            },
+            {
+                question: "¿En qué año llegó el hombre a la Luna?",
+                answers: ["1969", "1970", "1965", "1975"],
+                correct: 0
+            },
+            {
+                question: "¿Cuál es el océano más grande del mundo?",
+                answers: ["Atlántico", "Índico", "Pacífico", "Ártico"],
+                correct: 2
+            },
+            {
+                question: "¿Cuál es el animal terrestre más rápido?",
+                answers: ["León", "Guepardo", "Tigre", "Gacela"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+
+        function loadQuestion(index) {
+            const questionElement = document.getElementById('question');
+            const answersList = document.getElementById('answers-list');
+            const feedbackElement = document.getElementById('feedback');
+
+            questionElement.textContent = questions[index].question;
+            answersList.innerHTML = '';
+
+            questions[index].answers.forEach((answer, i) => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.classList.add('answer-btn');
+                button.onclick = () => selectAnswer(i);
+                li.appendChild(button);
+                answersList.appendChild(li);
+            });
+
+            feedbackElement.textContent = '';
+            updateNavigationButtons();
+        }
+
+        function selectAnswer(selectedIndex) {
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            checkAnswer(selectedIndex, questions[currentQuestionIndex].correct);
+            if (currentQuestionIndex < questions.length - 1) {
+                nextQuestion();
+            } else {
+                document.getElementById('summary-btn').style.display = 'inline-block';
+                document.getElementById('next-btn').style.display = 'none';
+            }
+        }
+
+        function checkAnswer(selectedIndex, correctIndex) {
+            const feedbackElement = document.getElementById('feedback');
+
+            if (selectedIndex === correctIndex) {
+                feedbackElement.textContent = '¡Correcto!';
+                feedbackElement.style.color = 'green';
+            } else {
+                feedbackElement.textContent = 'Incorrecto.';
+                feedbackElement.style.color = 'red';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function showSummary() {
+            const summaryElement = document.getElementById('summary');
+            const summaryList = document.getElementById('summary-list');
+            const scoreElement = document.getElementById('score');
+            let correctAnswers = 0;
+
+            summaryList.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const correctAnswer = question.correct;
+                const summaryItem = document.createElement('div');
+                summaryItem.classList.add('summary-item');
+                summaryItem.innerHTML = `
+                    <p><strong>Pregunta:</strong> ${question.question}</p>
+                    <p><strong>Tu respuesta:</strong> ${question.answers[userAnswer]}</p>
+                    <p><strong>Respuesta correcta:</strong> ${question.answers[correctAnswer]}</p>
+                `;
+                summaryList.appendChild(summaryItem);
+
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                }
+            });
+
+            const score = (correctAnswers / questions.length) * 100;
+            scoreElement.textContent = `Tu calificación: ${score.toFixed(2)}%`;
+
+            document.getElementById('question-container').style.display = 'none';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('summary').style.display = 'block';
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').style.display = currentQuestionIndex > 0 ? 'inline-block' : 'none';
+            document.getElementById('next-btn').style.display = currentQuestionIndex < questions.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('summary-btn').style.display = 'none';
+        }
+
+        window.onload = () => {
+            loadQuestion(currentQuestionIndex);
+            updateNavigationButtons();
+        };
+    </script>
+</body>
+</html>
