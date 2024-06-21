@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Syllabus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+
+        .infographic {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            border-left: 5px solid #0073e6;
+            background: #f9f9f9;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            color: #0073e6;
+        }
+
+        .section p {
+            margin: 10px 0 0;
+            line-height: 1.6;
+        }
+
+        .chart-container {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="infographic">
+        <h1>Course Title</h1>
+        <section class="section" id="welcome">
+            <h2>Welcome</h2>
+            <p>Welcome message and course introduction.</p>
+        </section>
+        <section class="section" id="prof-info">
+            <h2>Professor Information</h2>
+            <p>Contact details, office hours, etc.</p>
+        </section>
+        <section class="section" id="textbook">
+            <h2>Textbook</h2>
+            <p>Required textbooks and materials.</p>
+        </section>
+        <section class="section" id="schedule">
+            <h2>Schedule</h2>
+            <p>Weekly topics and important dates.</p>
+        </section>
+        <section class="section" id="grading">
+            <h2>Grading Scheme</h2>
+            <div class="chart-container">
+                <canvas id="gradingChart"></canvas>
+            </div>
+        </section>
+        <section class="section" id="assessments">
+            <h2>Assessments</h2>
+            <p>Types of assessments and their due dates.</p>
+        </section>
+        <section class="section" id="resources">
+            <h2>Resources</h2>
+            <p>Available resources for students.</p>
+        </section>
+        <section class="section" id="accommodations">
+            <h2>Accommodations</h2>
+            <p>Information on accommodations for disabilities.</p>
+        </section>
+        <section class="section" id="tutorials">
+            <h2>Tutorials</h2>
+            <p>Details on available tutorials and help sessions.</p>
+        </section>
+        <section class="section" id="storm-days">
+            <h2>Storm Days</h2>
+            <p>Policies for classes canceled due to weather.</p>
+        </section>
+    </div>
+    <script>
+        // Add any interactive functionality here
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Infographic loaded');
+
+            // Grading Chart
+            const ctx = document.getElementById('gradingChart').getContext('2d');
+            const gradingChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Exams', 'Assignments', 'Participation', 'Projects'],
+                    datasets: [{
+                        data: [40, 30, 15, 15],
+                        backgroundColor: ['#0073e6', '#e67e22', '#2ecc71', '#e74c3c'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
