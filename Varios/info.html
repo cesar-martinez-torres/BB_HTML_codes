@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphic Syllabus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,8 +46,22 @@
         }
 
         .chart-container {
-            width: 50%;
+            width: 100%;
+            max-width: 600px;
             margin: 0 auto;
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .github-link i {
+            margin-right: 8px;
+            font-size: 24px;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -61,6 +76,12 @@
         <section class="section" id="prof-info">
             <h2>Professor Information</h2>
             <p>Contact details, office hours, etc.</p>
+            <p>
+                <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank">
+                    <i class="fab fa-github"></i>
+                    GitHub Repository
+                </a>
+            </p>
         </section>
         <section class="section" id="textbook">
             <h2>Textbook</h2>
@@ -98,11 +119,9 @@
         </section>
     </div>
     <script>
-        // Add any interactive functionality here
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Infographic loaded');
 
-            // Grading Chart
             const ctx = document.getElementById('gradingChart').getContext('2d');
             const gradingChart = new Chart(ctx, {
                 type: 'pie',
@@ -121,8 +140,8 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(tooltipItem) {
-                                    return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
                                 }
                             }
                         }
