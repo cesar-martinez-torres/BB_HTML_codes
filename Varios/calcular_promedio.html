@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Promedio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Calculadora de Promedio</h1>
+        <form id="gradeForm">
+            <label for="activity1">Activity 1 (10%):</label>
+            <input type="number" id="activity1" required>
+            
+            <label for="activity2">Activity 2 (10%):</label>
+            <input type="number" id="activity2" required>
+            
+            <label for="firstPartial">First Partial (20%):</label>
+            <input type="number" id="firstPartial" required>
+            
+            <label for="activity3">Activity 3 (10%):</label>
+            <input type="number" id="activity3" required>
+            
+            <label for="activity4">Activity 4 (10%):</label>
+            <input type="number" id="activity4" required>
+            
+            <label for="secondPartial">Second Partial (20%):</label>
+            <input type="number" id="secondPartial" required>
+            
+            <label for="prototype">Final Project - Prototype (5%):</label>
+            <input type="number" id="prototype" required>
+            
+            <label for="partialReport">Final Project - Partial Report (5%):</label>
+            <input type="number" id="partialReport" required>
+            
+            <label for="finalReport">Final Project - Final Report (10%):</label>
+            <input type="number" id="finalReport" required>
+            
+            <button type="button" onclick="calculateAverage()">Calcular Promedio</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script>
+        function calculateAverage() {
+            const activity1 = parseFloat(document.getElementById('activity1').value);
+            const activity2 = parseFloat(document.getElementById('activity2').value);
+            const firstPartial = parseFloat(document.getElementById('firstPartial').value);
+            const activity3 = parseFloat(document.getElementById('activity3').value);
+            const activity4 = parseFloat(document.getElementById('activity4').value);
+            const secondPartial = parseFloat(document.getElementById('secondPartial').value);
+            const prototype = parseFloat(document.getElementById('prototype').value);
+            const partialReport = parseFloat(document.getElementById('partialReport').value);
+            const finalReport = parseFloat(document.getElementById('finalReport').value);
+            
+            if (isNaN(activity1) || isNaN(activity2) || isNaN(firstPartial) || isNaN(activity3) || isNaN(activity4) || isNaN(secondPartial) || isNaN(prototype) || isNaN(partialReport) || isNaN(finalReport)) {
+                alert('Por favor, ingresa todas las calificaciones.');
+                return;
+            }
+
+            const average = (activity1 * 0.1) + (activity2 * 0.1) + (firstPartial * 0.2) + (activity3 * 0.1) + (activity4 * 0.1) + (secondPartial * 0.2) + (prototype * 0.05) + (partialReport * 0.05) + (finalReport * 0.1);
+            document.getElementById('result').innerText = `Tu promedio es: ${average.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
