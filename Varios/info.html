@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphic Syllabus</title>
+    <meta name="description" content="Syllabus infographic for course outline and details.">
+    <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -12,7 +14,6 @@
             padding: 0;
             background: #f4f4f4;
         }
-
         .infographic {
             max-width: 1200px;
             margin: 0 auto;
@@ -21,13 +22,11 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
-
         .section {
             margin: 20px 0;
             padding: 20px;
@@ -36,23 +35,19 @@
             position: relative;
             padding-left: 40px;
         }
-
         .section h2 {
             margin-top: 0;
             color: #e67e22;
         }
-
         .section p {
             margin: 10px 0 0;
             line-height: 1.6;
         }
-
         .chart-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 300px; /* Reducir el tamaño a la mitad */
             margin: 0 auto;
         }
-
         .section-icon {
             position: absolute;
             left: 10px;
@@ -60,7 +55,6 @@
             font-size: 24px;
             color: #333;
         }
-
         .github-link {
             display: flex;
             align-items: center;
@@ -68,10 +62,54 @@
             color: #333;
             font-weight: bold;
         }
-
         .github-link i {
             margin-right: 8px;
             font-size: 24px;
+        }
+        .calendar {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin: 0 auto;
+        }
+        #calendar {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .day, .days-of-week {
+            width: calc(100% / 7);
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+        .day {
+            cursor: pointer;
+            position: relative;
+        }
+        .day:hover {
+            background-color: #f0f0f0;
+        }
+        .day.highlight:hover::after {
+            content: attr(data-event);
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
+        #footer {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -80,62 +118,61 @@
     <div class="infographic">
         <h1>Course Title</h1>
         <section class="section" id="welcome">
-            <i class="section-icon fas fa-handshake"></i>
+            <i class="section-icon fas fa-handshake" aria-hidden="true"></i>
             <h2>Welcome</h2>
             <p>Welcome message and course introduction.</p>
         </section>
-        <section class="section" id="prof-info">
-            <i class="section-icon fas fa-user"></i>
-            <h2>Professor Information</h2>
-            <p>Contact details, office hours, etc.</p>
-            <p>
-                <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank">
-                    <i class="fab fa-github"></i>
-                    GitHub Repository
-                </a>
-            </p>
-        </section>
-        <section class="section" id="textbook">
-            <i class="section-icon fas fa-book"></i>
-            <h2>Textbook</h2>
-            <p>Required textbooks and materials.</p>
-        </section>
-        <section class="section" id="schedule">
-            <i class="section-icon fas fa-calendar-alt"></i>
-            <h2>Schedule</h2>
-            <p id="next-activity">Loading next activity...</p>
-        </section>
         <section class="section" id="grading">
-            <i class="section-icon fas fa-chart-pie"></i>
+            <i class="section-icon fas fa-chart-pie" aria-hidden="true"></i>
             <h2>Grading Scheme</h2>
             <div class="chart-container">
                 <canvas id="gradingChart"></canvas>
             </div>
         </section>
-        <section class="section" id="assessments">
-            <i class="section-icon fas fa-tasks"></i>
-            <h2>Assessments</h2>
-            <p>Types of assessments and their due dates.</p>
+        <section class="section" id="schedule">
+            <i class="section-icon fas fa-calendar-alt" aria-hidden="true"></i>
+            <h2>Schedule</h2>
+            <div class="calendar">
+                <h1>June - Important Dates -</h1>
+                <div id="calendar"></div>
+                <div id="footer">Hover for details</div>
+            </div>
+        </section>
+        <section class="section" id="prof-info">
+            <i class="section-icon fas fa-user" aria-hidden="true"></i>
+            <h2>Professor Information</h2>
+            <p>Contact details, office hours, etc.</p>
+            <p>
+                <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank" aria-label="GitHub Repository">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    GitHub Repository
+                </a>
+            </p>
+        </section>
+        <section class="section" id="exams">
+            <i class="section-icon fas fa-pencil-alt" aria-hidden="true"></i>
+            <h2>Exams</h2>
+            <p>Types of exams and their due dates.</p>
         </section>
         <section class="section" id="resources">
-            <i class="section-icon fas fa-tools"></i>
+            <i class="section-icon fas fa-tools" aria-hidden="true"></i>
             <h2>Resources</h2>
             <p>Available resources for students.</p>
         </section>
-        <section class="section" id="accommodations">
-            <i class="section-icon fas fa-wheelchair"></i>
-            <h2>Accommodations</h2>
-            <p>Information on accommodations for disabilities.</p>
-        </section>
         <section class="section" id="tutorials">
-            <i class="section-icon fas fa-chalkboard-teacher"></i>
+            <i class="section-icon fas fa-chalkboard-teacher" aria-hidden="true"></i>
             <h2>Tutorials</h2>
             <p>Details on available tutorials and help sessions.</p>
         </section>
-        <section class="section" id="storm-days">
-            <i class="section-icon fas fa-cloud-sun-rain"></i>
-            <h2>Storm Days</h2>
-            <p>Policies for classes canceled due to weather.</p>
+        <section class="section" id="final-project-info">
+            <i class="section-icon fas fa-project-diagram" aria-hidden="true"></i>
+            <h2>Final Project Info</h2>
+            <p>Information on the final project.</p>
+        </section>
+        <section class="section" id="dias-festivos">
+            <i class="section-icon fas fa-calendar-day" aria-hidden="true"></i>
+            <h2>Días Festivos</h2>
+            <p>Policies for classes canceled due to holidays.</p>
         </section>
     </div>
     <script>
@@ -155,23 +192,45 @@
                 { title: "Activity 10", date: "2024-12-01" },
             ];
 
-            const getNextActivity = () => {
-                const now = new Date();
-                for (const activity of activities) {
-                    const activityDate = new Date(activity.date);
-                    if (activityDate > now) {
-                        return activity;
-                    }
-                }
-                return null;
+            const importantDates = {
+                "2024-06-05": "Examen parcial 1",
+                "2024-06-10": "Entrega de proyecto",
+                "2024-06-15": "Examen parcial 2",
+                "2024-06-20": "Actividad especial",
+                "2024-06-25": "Presentación final"
             };
 
-            const nextActivity = getNextActivity();
-            const nextActivityElement = document.getElementById('next-activity');
-            if (nextActivity) {
-                nextActivityElement.textContent = `Next Activity: ${nextActivity.title} - Due on ${nextActivity.date}`;
-            } else {
-                nextActivityElement.textContent = 'All activities are completed.';
+            const daysOfWeek = ['Sun.', 'Mon.', 'Tues.', 'Wed.', 'Thurs.', 'Fri.', 'Sat.'];
+
+            function generateCalendar(year, month) {
+                const calendarDiv = document.getElementById('calendar');
+                calendarDiv.innerHTML = '';
+                
+                for (let day of daysOfWeek) {
+                    const dayOfWeekDiv = document.createElement('div');
+                    dayOfWeekDiv.className = 'days-of-week';
+                    dayOfWeekDiv.innerText = day;
+                    calendarDiv.appendChild(dayOfWeekDiv);
+                }
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                for (let i = 0; i < firstDay; i++) {
+                    calendarDiv.innerHTML += '<div class="day empty"></div>';
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const isImportant = importantDates[dateStr];
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'day' + (isImportant ? ' highlight' : '');
+                    dayDiv.innerText = day;
+                    if (isImportant) {
+                        dayDiv.setAttribute('data-event', isImportant);
+                    }
+                    calendarDiv.appendChild(dayDiv);
+                }
             }
 
             const ctx = document.getElementById('gradingChart').getContext('2d');
@@ -200,6 +259,8 @@
                     }
                 }
             });
+
+            generateCalendar(2024, 5); // Junio 2024
         });
     </script>
 </body>
