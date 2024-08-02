@@ -90,26 +90,40 @@
             cursor: pointer;
             position: relative;
         }
+        .day.important {
+            background-color: #e67e22;
+            color: white;
+        }
+        .day.activity {
+            background-color: #0073e6;
+            color: white;
+        }
         .day:hover {
             background-color: #f0f0f0;
         }
-        .day.highlight:hover::after {
+        .day.important:hover::after, .day.activity:hover::after {
             content: attr(data-event);
             position: absolute;
-            bottom: 30px;
+            bottom: -25px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #fff;
+            background-color: #e67e22;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             white-space: nowrap;
+            z-index: 10;
         }
         #footer {
             margin-top: 10px;
             font-size: 14px;
             color: #555;
+        }
+        #next-activity {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #e67e22;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -133,14 +147,15 @@
             <i class="section-icon fas fa-calendar-alt" aria-hidden="true"></i>
             <h2>Schedule</h2>
             <div class="calendar">
-                <h1>June - Important Dates -</h1>
+                <h1 id="calendar-title">Important Dates</h1>
                 <div id="calendar"></div>
                 <div id="footer">Hover for details</div>
+                <div id="next-activity"></div>
             </div>
         </section>
-        <section class="section" id="prof-info">
-            <i class="section-icon fas fa-user" aria-hidden="true"></i>
-            <h2>Professor Information</h2>
+        <section class="section" id="class-resources">
+            <i class="section-icon fas fa-book" aria-hidden="true"></i>
+            <h2>Class Resources</h2>
             <p>Contact details, office hours, etc.</p>
             <p>
                 <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank" aria-label="GitHub Repository">
@@ -154,11 +169,6 @@
             <h2>Exams</h2>
             <p>Types of exams and their due dates.</p>
         </section>
-        <section class="section" id="resources">
-            <i class="section-icon fas fa-tools" aria-hidden="true"></i>
-            <h2>Resources</h2>
-            <p>Available resources for students.</p>
-        </section>
         <section class="section" id="tutorials">
             <i class="section-icon fas fa-chalkboard-teacher" aria-hidden="true"></i>
             <h2>Tutorials</h2>
@@ -169,9 +179,9 @@
             <h2>Final Project Info</h2>
             <p>Information on the final project.</p>
         </section>
-        <section class="section" id="dias-festivos">
+        <section class="section" id="holidays">
             <i class="section-icon fas fa-calendar-day" aria-hidden="true"></i>
-            <h2>Días Festivos</h2>
+            <h2>Holidays</h2>
             <p>Policies for classes canceled due to holidays.</p>
         </section>
     </div>
@@ -223,14 +233,45 @@
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                     const isImportant = importantDates[dateStr];
+                    const activity = activities.find(activity => activity.date === dateStr);
                     const dayDiv = document.createElement('div');
-                    dayDiv.className = 'day' + (isImportant ? ' highlight' : '');
-                    dayDiv.innerText = day;
+                    dayDiv.className = 'day';
                     if (isImportant) {
+                        dayDiv.classList.add('important');
                         dayDiv.setAttribute('data-event', isImportant);
                     }
+                    if (activity) {
+                        dayDiv.classList.add('activity');
+                        dayDiv.setAttribute('data-event', activity.title);
+                    }
+                    dayDiv.innerText = day;
                     calendarDiv.appendChild(dayDiv);
                 }
+
+                const nextActivity = getNextActivity(year, month);
+                if (nextActivity) {
+                    const nextActivityDiv = document.getElementById('next-activity');
+                    nextActivityDiv.innerText = `Next activity: ${nextActivity.title} due on ${nextActivity.date}`;
+                }
+            }
+
+            function getNextActivity(year, month) {
+                const today = new Date();
+                for (let activity of activities) {
+                    const activityDate = new Date(activity.date);
+                    if (activityDate > today) {
+                        return activity;
+                    }
+                }
+                return null;
+            }
+
+            function updateCalendar() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                document.getElementById('calendar-title').innerText = `${daysOfWeek[month]} - Important Dates -`;
+                generateCalendar(year, month);
             }
 
             const ctx = document.getElementById('gradingChart').getContext('2d');
@@ -260,7 +301,7 @@
                 }
             });
 
-            generateCalendar(2024, 5); // Junio 2024
+            updateCalendar();
         });
     </script>
 </body>
