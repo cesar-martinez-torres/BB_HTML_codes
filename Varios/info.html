@@ -95,7 +95,7 @@
             color: white;
         }
         .day.activity {
-            background-color: #0073e6;
+            background-color: #e67e22;
             color: white;
         }
         .day:hover {
@@ -130,7 +130,7 @@
 </head>
 <body>
     <div class="infographic">
-        <h1>Course Title</h1>
+        <h1></h1>
         <section class="section" id="welcome">
             <i class="section-icon fas fa-handshake" aria-hidden="true"></i>
             <h2>Welcome</h2>
@@ -158,6 +158,11 @@
             <h2>Class Resources</h2>
             <p>Contact details, office hours, etc.</p>
             <p>
+                <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank" aria-label="GitHub Repository">
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                    GitHub Course Repository
+                </a>
+                <P>
                 <a class="github-link" href="https://github.com/cesar-martinez-torres/Formatos_LRT2022" target="_blank" aria-label="GitHub Repository">
                     <i class="fab fa-github" aria-hidden="true"></i>
                     GitHub Repository
@@ -270,7 +275,8 @@
                 const today = new Date();
                 const year = today.getFullYear();
                 const month = today.getMonth();
-                document.getElementById('calendar-title').innerText = `${daysOfWeek[month]} - Important Dates -`;
+                const monthn = today.toLocaleString('en-US', { month: 'long' });
+                document.getElementById('calendar-title').innerText = `${[monthn]}`;
                 generateCalendar(year, month);
             }
 
