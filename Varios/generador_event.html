@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de eventos del calendario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+
+    input[type="text"], input[type="date"], select {
+      width: 95%;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      height: 250px;
+      margin-top: 15px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📅 Generador automático de eventos del calendario</h2>
+
+  <table id="eventsTable">
+    <thead>
+      <tr>
+        <th>Tipo (class, task, info, exam)</th>
+        <th>Título del evento</th>
+        <th>Fecha (YYYY-MM-DD)</th>
+        <th>❌</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <select>
+            <option value="class">class</option>
+            <option value="task">task</option>
+            <option value="info">info</option>
+            <option value="exam">exam</option>
+          </select>
+        </td>
+        <td><input type="text" placeholder="Ej. Inicio de clases"></td>
+        <td><input type="date"></td>
+        <td><button onclick="deleteRow(this)">🗑️</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button onclick="addRow()">➕ Agregar fila</button>
+  <button onclick="generateCode()">⚙️ Generar código</button>
+
+  <textarea id="outputCode" placeholder="Aquí aparecerá el código generado..." readonly></textarea>
+
+  <script>
+    function addRow() {
+      const table = document.getElementById("eventsTable").querySelector("tbody");
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>
+          <select>
+            <option value="class">class</option>
+            <option value="task">task</option>
+            <option value="info">info</option>
+            <option value="exam">exam</option>
+          </select>
+        </td>
+        <td><input type="text" placeholder="Ej. Tema o título"></td>
+        <td><input type="date"></td>
+        <td><button onclick="deleteRow(this)">🗑️</button></td>
+      `;
+      table.appendChild(newRow);
+    }
+
+    function deleteRow(btn) {
+      const row = btn.parentElement.parentElement;
+      row.remove();
+    }
+
+    function generateCode() {
+      const rows = document.querySelectorAll("#eventsTable tbody tr");
+      const events = {
+        class: {},
+        task: {},
+        info: {},
+        exam: {}
+      };
+
+      rows.forEach(row => {
+        const type = row.querySelector("select").value;
+        const title = row.querySelectorAll("input")[0].value.trim();
+        const date = row.querySelectorAll("input")[1].value;
+
+        if (type && title && date) {
+          events[type][date] = title;
+        }
+      });
+
+      let output = "";
+
+      for (const type of ["class", "task", "info", "exam"]) {
+        const map = events[type];
+        const label = {
+          class: "classDays",
+          task: "taskDays",
+          info: "infoDays",
+          exam: "examDays"
+        }[type];
+
+        output += `const ${label} = {\n`;
+        for (const date of Object.keys(map).sort()) {
+          output += `  "${date}": "${map[date]}",\n`;
+        }
+        output += `};\n\n`;
+      }
+
+      document.getElementById("outputCode").value = output.trim();
+    }
+  </script>
+
+</body>
+</html>
