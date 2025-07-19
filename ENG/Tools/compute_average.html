@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .calculator {
+      background-color: white;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .naranja label {
+      color: #ef6c00;
+    }
+
+    .verde label {
+      color: #2e7d32;
+    }
+
+    button {
+      grid-column: span 4;
+      padding: 12px;
+      background-color: #43a047;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #2e7d32;
+    }
+
+    #result {
+      font-size: 18px;
+      color: #d84315;
+      margin-top: 10px;
+    }
+
+    .disclaimer {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>Grade Calculator</h1>
+    <form id="gradeForm">
+      <div class="input-group naranja">
+        <label for="task1">Activity / Assignment 1 (10%)</label>
+        <input type="number" id="task1" required>
+      </div>
+      <div class="input-group verde">
+        <label for="task2">Activity / Assignment 2 (10%)</label>
+        <input type="number" id="task2" required>
+      </div>
+      <div class="input-group naranja">
+        <label for="task3">Activity / Assignment 3 (10%)</label>
+        <input type="number" id="task3" required>
+      </div>
+      <div class="input-group verde">
+        <label for="task4">Activity / Assignment 4 (10%)</label>
+        <input type="number" id="task4" required>
+      </div>
+      <div class="input-group naranja">
+        <label for="exam1">Midterm Exam 1 (20%)</label>
+        <input type="number" id="exam1" required>
+      </div>
+      <div class="input-group verde">
+        <label for="exam2">Midterm Exam 2 (20%)</label>
+        <input type="number" id="exam2" required>
+      </div>
+      <div class="input-group naranja">
+        <label for="finalProject">Final Project (20%)</label>
+        <input type="number" id="finalProject" required>
+      </div>
+      <div class="input-group verde">
+        <label for="bonus">Extra Points (+)</label>
+        <input type="number" id="bonus" value="0">
+      </div>
+      <button type="button" onclick="calculateAverage()">Calculate Average</button>
+    </form>
+    <div id="result"></div>
+    <p class="disclaimer">
+      This is a reference tool only. Please check the university's official system to confirm your final grade.
+    </p>
+  </div>
+
+  <script>
+    function calculateAverage() {
+      const task1 = parseFloat(document.getElementById('task1').value);
+      const task2 = parseFloat(document.getElementById('task2').value);
+      const task3 = parseFloat(document.getElementById('task3').value);
+      const task4 = parseFloat(document.getElementById('task4').value);
+      const exam1 = parseFloat(document.getElementById('exam1').value);
+      const exam2 = parseFloat(document.getElementById('exam2').value);
+      const finalProject = parseFloat(document.getElementById('finalProject').value);
+      const bonus = parseFloat(document.getElementById('bonus').value) || 0;
+
+      if ([task1, task2, task3, task4, exam1, exam2, finalProject].some(isNaN)) {
+        alert('Please enter all grades.');
+        return;
+      }
+
+      const average = (
+        task1 * 0.1 +
+        task2 * 0.1 +
+        task3 * 0.1 +
+        task4 * 0.1 +
+        exam1 * 0.2 +
+        exam2 * 0.2 +
+        finalProject * 0.2
+      ) + bonus;
+
+      const cappedAverage = Math.min(average, 10.0);
+      document.getElementById('result').innerText = `Your average is: ${cappedAverage.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>

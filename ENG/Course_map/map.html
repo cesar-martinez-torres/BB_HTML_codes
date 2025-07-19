@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Map: Digital Design</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 30px;
+      max-width: 1800px;
+      margin: auto;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background-color: #ffffff;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .subsection {
+      border: 1px solid #ccc;
+      padding: 8px 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .orange { background-color: #ffcc80; }
+    .green { background-color: #a5d6a7; }
+
+    .info-msg {
+      font-size: 14px;
+      color: #555;
+      font-style: italic;
+      margin-top: 5px;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 15px #000;
+      position: relative;
+      text-align: left;
+    }
+
+    .popup-content h3 {
+      margin-top: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .popup-btn {
+      display: inline-block;
+      padding: 8px 14px;
+      margin-top: 15px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .popup-btn:hover {
+      background-color: #0d47a1;
+    }
+  </style>
+</head>
+<body>
+  <h2>🌐 <strong>Course: Digital Design</strong></h2>
+  <div class="grid">
+    <div class="section">
+      <div class="section-title" onclick="showPopup('Getting Started', 'First steps to begin your experience.', 'https://ejemplo.com/inicio')">📂 Getting<br>Started</div>
+      <div class="subsection orange" onclick="showPopup('Welcome', 'Welcome message for the course.', 'https://ejemplo.com/bienvenida')">👋 Welcome</div>
+      <div class="subsection green" onclick="showPopup('Syllabus', 'Course content and structure.', 'https://ejemplo.com/syllabus')">📄 Syllabus</div>
+      <div class="subsection orange" onclick="showPopup('Schedule', 'Official class schedule.', 'https://ejemplo.com/horario')">🕒 Schedule</div>
+      <div class="subsection green" onclick="showPopup('Blackboard', 'Access to the platform.', 'https://ejemplo.com/blackboard')">🔑 Blackboard</div>
+      <div class="subsection orange" onclick="showPopup('Initial Survey', 'Diagnostic survey.', 'https://ejemplo.com/encuesta')">📝 Initial Survey</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" onclick="showPopup('Course Introduction', 'Presentation material, objectives and scope.', 'https://ejemplo.com/presentacion')">📖 Course<br>Introduction</div>
+      <div class="subsection orange" onclick="showPopup('Objectives', 'Course goals and learning outcomes.', 'https://ejemplo.com/objetivos')">🎯 Objectives</div>
+      <div class="subsection green" onclick="showPopup('Methodology', 'How the course will be delivered.', 'https://ejemplo.com/metodologia')">🧭 Methodology</div>
+      <div class="subsection orange" onclick="showPopup('Assessment', 'Grading criteria.', 'https://ejemplo.com/evaluacion')">📊 Assessment</div>
+      <div class="subsection green" onclick="showPopup('Bibliography', 'Recommended sources.', 'https://ejemplo.com/bibliografia')">📚 Bibliography</div>
+      <div class="subsection orange" onclick="showPopup('Policies', 'Rules and guidelines.', 'https://ejemplo.com/politicas')">⚖️ Policies</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" onclick="showPopup('Class Resources and Activities', 'Materials and weekly activities.', 'https://ejemplo.com/recursos')">🧰 Class Resources<br>and Activities</div>
+      <div class="subsection orange" onclick="showPopup('Week 1', 'Topics and practice for week 1.', 'https://ejemplo.com/semana1')">📆 Week 1</div>
+      <div class="subsection green" onclick="showPopup('Week 2', 'Topics and practice for week 2.', 'https://ejemplo.com/semana2')">📆 Week 2</div>
+      <div class="subsection orange" onclick="showPopup('Week 3', 'Topics and practice for week 3.', 'https://ejemplo.com/semana3')">📆 Week 3</div>
+      <div class="subsection green" onclick="showPopup('Final Project', 'Final project description.', 'https://ejemplo.com/proyecto')">🛠️ Final Project</div>
+      <div class="subsection orange" onclick="showPopup('Exams', 'Exam dates and topics.', 'https://ejemplo.com/examenes')">📝 Exams</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" onclick="showPopup('Self-Learning Activities', 'Material for independent learning.', 'https://ejemplo.com/autoaprendizaje')">🧠 Self-Learning<br>Activities</div>
+      <div class="subsection orange" onclick="showPopup('Reading 1', 'First recommended reading.', 'https://ejemplo.com/lectura1')">📖 Reading 1</div>
+      <div class="subsection green" onclick="showPopup('Reading 2', 'Second recommended reading.', 'https://ejemplo.com/lectura2')">📖 Reading 2</div>
+      <div class="subsection orange" onclick="showPopup('Video 1', 'Introductory video on digital logic.', 'https://ejemplo.com/video1')">🎥 Video 1</div>
+      <div class="subsection green" onclick="showPopup('Exercise 1', 'Suggested individual exercise.', 'https://ejemplo.com/ejercicio1')">🧩 Exercise 1</div>
+      <div class="subsection orange" onclick="showPopup('Challenge', 'Optional extra challenge.', 'https://ejemplo.com/desafio')">🏆 Challenge</div>
+    </div>
+  </div>
+
+  <p class="info-msg">Click each box for more information.</p>
+
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">❌</span>
+      <h3 id="popupTitle">Title</h3>
+      <p id="popupDescription">Description</p>
+      <a id="popupLink" class="popup-btn" href="#" target="_blank">Go to section</a>
+    </div>
+  </div>
+
+  <script>
+    function showPopup(title, description, url) {
+      document.getElementById("popupTitle").textContent = title;
+      document.getElementById("popupDescription").textContent = description;
+      document.getElementById("popupLink").href = url;
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+  </script>
+</body>
+</html>

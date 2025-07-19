@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .calendar-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .calendar-nav button {
+      width: 40px;
+      height: 40px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #e0e0e0;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+    }
+
+    .calendar-nav span {
+      margin: 0 20px;
+      font-size: 18px;
+      font-weight: bold;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      width: 14.28%;
+      height: 80px;
+      text-align: center;
+      vertical-align: top;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .class-day { background-color: #ffcc80; cursor: pointer; }
+    .task-day  { background-color: #a5d6a7; cursor: pointer; }
+    .info-day  { background-color: #90caf9; cursor: pointer; }
+    .exam-day  { background-color: #ef9a9a; cursor: pointer; }
+
+    .footer-info {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 2px solid #ddd;
+      font-size: 16px;
+    }
+
+    .footer-info p {
+      margin: 5px 0;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px #000;
+      position: relative;
+      text-align: left;
+    }
+
+    .popup-content h3 {
+      margin-top: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .icon {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📅 Task Map and Class Calendar</h2>
+
+  <div class="calendar-nav">
+    <button onclick="changeMonth(-1)">&#8592;</button>
+    <span id="monthYear"></span>
+    <button onclick="changeMonth(1)">&#8594;</button>
+  </div>
+
+  <table id="calendar">
+    <thead>
+      <tr>
+        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="footer-info">
+    <p><strong>Next class:</strong> <span id="nextClass">Searching...</span></p>
+    <p><strong>Next task:</strong> <span id="nextTask">Searching...</span></p>
+  </div>
+
+  <!-- Popup -->
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">❌</span>
+      <h3><span id="popupIcon" class="icon">📘</span><span id="popupTitle">Title</span></h3>
+      <p><strong>Date:</strong> <span id="popupDate"></span></p>
+      <p><strong>Type:</strong> <span id="popupType"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const year = 2025;
+    const allowedMonths = [6, 7, 8, 9, 10, 11]; // July to December
+
+    const classDays = {
+      "2025-07-19": "Test 1",
+      "2025-10-14": "Robotics Control"
+    };
+
+    const taskDays = {
+      "2025-07-12": "Project Proposal",
+      "2025-07-16": "Simulation Report"
+    };
+
+    const infoDays = {
+      "2025-07-01": "Start of classes",
+      "2025-10-12": "No class - Holiday"
+    };
+
+    const examDays = {
+      "2025-10-10": "Midterm Exam",
+      "2025-10-11": "Final Review"
+    };
+
+    let currentMonthIndex = 0;
+    const calendarBody = document.querySelector("#calendar tbody");
+    const monthYearEl = document.getElementById("monthYear");
+
+    function renderCalendar(month) {
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startDay = firstDay.getDay();
+
+      const monthName = firstDay.toLocaleString('en-US', { month: 'long' }).toUpperCase();
+      monthYearEl.textContent = `${monthName} ${year}`;
+      calendarBody.innerHTML = "";
+
+      let row = document.createElement("tr");
+      let dayCounter = 1;
+
+      for (let i = 0; i < 42; i++) {
+        const cell = document.createElement("td");
+
+        if (i >= startDay && dayCounter <= lastDay.getDate()) {
+          const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
+          cell.textContent = dayCounter;
+
+          const eventMap = [
+            { data: classDays, css: "class-day", icon: "📘", label: "Class" },
+            { data: taskDays,  css: "task-day",  icon: "📎", label: "Task" },
+            { data: infoDays,  css: "info-day",  icon: "🗓️", label: "Info"  },
+            { data: examDays,  css: "exam-day",  icon: "📝", label: "Exam" }
+          ];
+
+          for (const { data, css, icon, label } of eventMap) {
+            if (data[dateKey]) {
+              cell.classList.add(css);
+              cell.title = data[dateKey];
+              cell.dataset.date = dateKey;
+              cell.dataset.type = label;
+              cell.dataset.icon = icon;
+              cell.dataset.title = data[dateKey];
+              cell.addEventListener("click", () => {
+                showPopup(
+                  cell.dataset.date,
+                  cell.dataset.type,
+                  cell.dataset.title,
+                  cell.dataset.icon
+                );
+              });
+            }
+          }
+
+          dayCounter++;
+        } else {
+          cell.innerHTML = "&nbsp;";
+        }
+
+        row.appendChild(cell);
+        if ((i + 1) % 7 === 0) {
+          calendarBody.appendChild(row);
+          row = document.createElement("tr");
+        }
+      }
+
+      updateNextEvents();
+    }
+
+    function formatDate(dateStr) {
+      const [y, m, d] = dateStr.split("-");
+      const date = new Date(y, m - 1, d);
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function showPopup(dateStr, type, title, icon) {
+      document.getElementById("popupDate").textContent = formatDate(dateStr);
+      document.getElementById("popupType").textContent = type;
+      document.getElementById("popupTitle").textContent = title;
+      document.getElementById("popupIcon").textContent = icon;
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    function changeMonth(direction) {
+      currentMonthIndex += direction;
+      if (currentMonthIndex < 0) currentMonthIndex = 0;
+      if (currentMonthIndex >= allowedMonths.length) currentMonthIndex = allowedMonths.length - 1;
+      renderCalendar(allowedMonths[currentMonthIndex]);
+      closePopup();
+    }
+
+    function updateNextEvents() {
+      const today = new Date();
+
+      function findNext(map) {
+        return Object.keys(map)
+          .filter(date => new Date(date) >= today)
+          .sort()
+          .map(date => ({ date, title: map[date] }))[0];
+      }
+
+      const nextClass = findNext(classDays);
+      const nextTask = findNext(taskDays);
+
+      document.getElementById("nextClass").textContent = nextClass
+        ? `${formatDate(nextClass.date)} - ${nextClass.title}`
+        : "No upcoming classes";
+
+      document.getElementById("nextTask").textContent = nextTask
+        ? `${formatDate(nextTask.date)} - ${nextTask.title}`
+        : "No upcoming tasks";
+    }
+
+    renderCalendar(allowedMonths[currentMonthIndex]);
+  </script>
+
+</body>
+</html>
