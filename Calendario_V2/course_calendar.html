@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario del Curso</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+    h2 { text-align: center; margin-bottom: 10px; }
+
+    .calendar-nav { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; gap: 10px; }
+    .calendar-nav button {
+      width: 40px; height: 40px; font-size: 20px; font-weight: bold; cursor: pointer;
+      background-color: #e0e0e0; border: 1px solid #bbb; border-radius: 4px;
+    }
+    .calendar-nav span { margin: 0 10px; font-size: 18px; font-weight: bold; min-width: 180px; text-align: center; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      width: 14.28%; height: 80px; text-align: center; vertical-align: top;
+      border: 1px solid #ccc; padding: 5px; position: relative;
+    }
+    th { background-color: #f2f2f2; }
+
+    .class-day { background-color: #ffcc80; cursor: pointer; }
+    .task-day  { background-color: #a5d6a7; cursor: pointer; }
+    .info-day  { background-color: #90caf9; cursor: pointer; }
+    .exam-day  { background-color: #ef9a9a; cursor: pointer; }
+
+    .today { outline: 3px solid #000; outline-offset: -3px; font-weight: bold; }
+    .today-marker {
+      position: absolute; bottom: 4px; right: 4px;
+      font-size: 10px; padding: 2px 4px; border: 1px solid #000;
+      border-radius: 4px; background: #fff;
+    }
+
+    .footer-info { margin-top: 20px; padding-top: 10px; border-top: 2px solid #ddd; font-size: 16px; }
+    .footer-info p { margin: 5px 0; }
+
+    .popup-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4); display: none;
+      justify-content: center; align-items: center; z-index: 999;
+    }
+    .popup-content {
+      background: white; padding: 20px; border-radius: 10px;
+      width: 90%; max-width: 520px; box-shadow: 0 0 10px #000;
+      position: relative; text-align: left;
+    }
+    .popup-content h3 { margin-top: 0; }
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #555; }
+    .icon { font-size: 20px; margin-right: 8px; }
+    .popup-list { margin: 8px 0 0 0; padding-left: 18px; }
+  </style>
+</head>
+<body>
+
+  <h2></h2>
+
+  <div class="calendar-nav">
+    <button id="prevBtn" title="" aria-label="prev">&#8592;</button>
+    <button id="todayBtn" title="" aria-label="today">📍</button>
+    <span id="monthYear"></span>
+    <button id="nextBtn" title="" aria-label="next">&#8594;</button>
+  </div>
+
+  <table id="calendar">
+    <thead><tr id="dowRow"></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="footer-info">
+    <p><strong><span id="nextClassLabel"></span></strong> <span id="nextClass">...</span></p>
+    <p><strong><span id="nextTaskLabel"></span></strong> <span id="nextTask">...</span></p>
+  </div>
+
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">❌</span>
+      <h3><span id="popupIcon" class="icon">📌</span><span id="popupTitle"></span></h3>
+      <p><strong><span id="popupDateLabel"></span></strong> <span id="popupDate"></span></p>
+      <div id="popupBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const year = 2026;
+    const allowedMonths = [0, 1, 2, 3, 4];
+    const EXPORT_LANG = "es";
+
+    const I18N = {
+      es: {
+        locale: "es-MX",
+        title: "Calendario del Curso",
+        prevTitle: "Mes anterior",
+        nextTitle: "Mes siguiente",
+        todayTitle: "Ir a hoy",
+        dow: ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],
+        nextClassLabel: "Próxima clase:",
+        nextTaskLabel: "Próxima tarea:",
+        noneUpcomingClass: "No hay próximas clases",
+        noneUpcomingTask: "No hay próximas tareas",
+        popupTitle: "Eventos",
+        dateLabel: "Fecha:",
+        outOfRange: "Hoy está fuera del rango permitido.",
+        todayTag: "HOY"
+      },
+      en: {
+        locale: "en-US",
+        title: "Calendario del Curso",
+        prevTitle: "Previous month",
+        nextTitle: "Next month",
+        todayTitle: "Go to today",
+        dow: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+        nextClassLabel: "Next class:",
+        nextTaskLabel: "Next task:",
+        noneUpcomingClass: "No upcoming classes",
+        noneUpcomingTask: "No upcoming tasks",
+        popupTitle: "Events",
+        dateLabel: "Date:",
+        outOfRange: "Today is outside the allowed calendar range.",
+        todayTag: "TODAY"
+      }
+    };
+
+    const T = I18N[EXPORT_LANG] || I18N.en;
+
+    const EVENTS = [
+  {
+    "date": "2026-01-06",
+    "type": "Exam",
+    "title": "PERIODO EXÁMENES 1"
+  },
+  {
+    "date": "2026-01-07",
+    "type": "Exam",
+    "title": "PERIODO EXÁMENES 1"
+  },
+  {
+    "date": "2026-01-08",
+    "type": "Exam",
+    "title": "PERIODO EXÁMENES 1"
+  },
+  {
+    "date": "2026-01-09",
+    "type": "Exam",
+    "title": "PERIODO EXÁMENES 1"
+  },
+  {
+    "date": "2026-01-12",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-13",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-14",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-15",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-16",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-17",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-18",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-19",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-20",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-21",
+    "type": "Info",
+    "title": "[VACACIONES] VACACIONES"
+  },
+  {
+    "date": "2026-01-01",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-02",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-05",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-06",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-07",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-08",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-09",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-22",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-23",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-26",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-27",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-28",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-29",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-01-30",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-02",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-03",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-04",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-05",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-06",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-09",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-10",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-11",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-12",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-13",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-16",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-17",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-18",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-19",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-20",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-23",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-24",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-25",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-26",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-02-27",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-02",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-03",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-04",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-05",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-06",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-09",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-10",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-11",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-12",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-13",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-16",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-17",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-18",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-19",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-20",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-23",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-24",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-25",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-26",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-27",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-30",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-03-31",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-01",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-02",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-03",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-06",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-07",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-08",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-09",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-10",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-13",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-14",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-15",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-16",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-17",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-20",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-21",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-22",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-23",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-24",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-27",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-28",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-29",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-04-30",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-01",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-04",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-05",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-06",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-07",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-08",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-11",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-12",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-13",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-14",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-15",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-18",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-19",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-20",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-21",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-22",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-25",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-26",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-27",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-28",
+    "type": "Class",
+    "title": "CLASE"
+  },
+  {
+    "date": "2026-05-29",
+    "type": "Class",
+    "title": "CLASE"
+  }
+];
+
+    const TYPE_TO_META = {
+      "Class": { css: "class-day", icon: "📘" },
+      "Task":  { css: "task-day",  icon: "📎" },
+      "Info":  { css: "info-day",  icon: "🗓️" },
+      "Exam":  { css: "exam-day",  icon: "📝" },
+    };
+
+    function eventsByDate(events) {
+      const map = {};
+      for (const ev of events) {
+        if (!map[ev.date]) map[ev.date] = [];
+        map[ev.date].push(ev);
+      }
+      const order = { "Exam": 0, "Task": 1, "Class": 2, "Info": 3 };
+      for (const k of Object.keys(map)) {
+        map[k].sort((a,b) => (order[a.type] ?? 99) - (order[b.type] ?? 99));
+      }
+      return map;
+    }
+
+    const EVENTS_BY_DATE = eventsByDate(EVENTS);
+
+    let currentMonthIndex = 0;
+    const calendarBody = document.querySelector("#calendar tbody");
+    const monthYearEl = document.getElementById("monthYear");
+
+    document.title = T.title;
+    document.getElementById("prevBtn").title = T.prevTitle;
+    document.getElementById("nextBtn").title = T.nextTitle;
+    document.getElementById("todayBtn").title = T.todayTitle;
+    document.getElementById("nextClassLabel").textContent = T.nextClassLabel;
+    document.getElementById("nextTaskLabel").textContent = T.nextTaskLabel;
+    document.getElementById("popupTitle").textContent = T.popupTitle;
+    document.getElementById("popupDateLabel").textContent = T.dateLabel;
+
+    const dowRow = document.getElementById("dowRow");
+    dowRow.innerHTML = T.dow.map(d => `<th>${d}</th>`).join("");
+
+    document.getElementById("prevBtn").addEventListener("click", () => changeMonth(-1));
+    document.getElementById("nextBtn").addEventListener("click", () => changeMonth(1));
+    document.getElementById("todayBtn").addEventListener("click", goToToday);
+
+    function renderCalendar(month) {
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startDay = firstDay.getDay();
+
+      const monthName = firstDay.toLocaleString(T.locale, { month: 'long' }).toUpperCase();
+      monthYearEl.textContent = `${monthName} ${year}`;
+      calendarBody.innerHTML = "";
+
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+      let row = document.createElement("tr");
+      let dayCounter = 1;
+
+      for (let i = 0; i < 42; i++) {
+        const cell = document.createElement("td");
+
+        if (i >= startDay && dayCounter <= lastDay.getDate()) {
+          const dateKey = `${year}-${String(month + 1).padStart(2,'0')}-${String(dayCounter).padStart(2,'0')}`;
+          cell.textContent = dayCounter;
+
+          if (dateKey === todayKey) {
+            cell.classList.add("today");
+            const tag = document.createElement("div");
+            tag.className = "today-marker";
+            tag.textContent = T.todayTag;
+            cell.appendChild(tag);
+          }
+
+          const list = EVENTS_BY_DATE[dateKey] || [];
+          if (list.length > 0) {
+            for (const ev of list) {
+              const meta = TYPE_TO_META[ev.type];
+              if (meta) cell.classList.add(meta.css);
+            }
+            cell.title = list.map(ev => `${ev.type}: ${ev.title}`).join(" | ");
+            cell.style.cursor = "pointer";
+            cell.addEventListener("click", () => showPopup(dateKey));
+          }
+
+          dayCounter++;
+        } else {
+          cell.innerHTML = "&nbsp;";
+        }
+
+        row.appendChild(cell);
+        if ((i + 1) % 7 === 0) {
+          calendarBody.appendChild(row);
+          row = document.createElement("tr");
+        }
+      }
+
+      updateNextEvents();
+    }
+
+    function formatDate(dateStr) {
+      const [y, m, d] = dateStr.split("-");
+      const dt = new Date(y, m - 1, d);
+      return dt.toLocaleDateString(T.locale, { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function showPopup(dateStr) {
+      document.getElementById("popupDate").textContent = formatDate(dateStr);
+
+      const list = EVENTS_BY_DATE[dateStr] || [];
+      const body = document.getElementById("popupBody");
+
+      if (list.length === 0) {
+        body.innerHTML = "<p>No events</p>";
+      } else {
+        const items = list.map(ev => {
+          const meta = TYPE_TO_META[ev.type] || { icon: "📌" };
+          return `<li>${meta.icon} <strong>${ev.type}:</strong> ${ev.title}</li>`;
+        }).join("");
+        body.innerHTML = `<ul class="popup-list">${items}</ul>`;
+      }
+
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    function changeMonth(direction) {
+      currentMonthIndex += direction;
+      if (currentMonthIndex < 0) currentMonthIndex = 0;
+      if (currentMonthIndex >= allowedMonths.length) currentMonthIndex = allowedMonths.length - 1;
+      renderCalendar(allowedMonths[currentMonthIndex]);
+      closePopup();
+    }
+
+    function goToToday() {
+      const now = new Date();
+      const idx = allowedMonths.indexOf(now.getMonth());
+      if (idx !== -1) {
+        currentMonthIndex = idx;
+        renderCalendar(allowedMonths[currentMonthIndex]);
+        closePopup();
+      } else {
+        alert(T.outOfRange);
+      }
+    }
+
+    function updateNextEvents() {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      function findNext(type) {
+        return EVENTS
+          .filter(ev => ev.type === type)
+          .filter(ev => new Date(ev.date) >= today)
+          .sort((a, b) => a.date.localeCompare(b.date))[0];
+      }
+
+      const nextClass = findNext("Class");
+      const nextTask = findNext("Task");
+
+      document.getElementById("nextClass").textContent = nextClass
+        ? `${formatDate(nextClass.date)} - ${nextClass.title}`
+        : T.noneUpcomingClass;
+
+      document.getElementById("nextTask").textContent = nextTask
+        ? `${formatDate(nextTask.date)} - ${nextTask.title}`
+        : T.noneUpcomingTask;
+    }
+
+    renderCalendar(allowedMonths[currentMonthIndex]);
+  </script>
+
+</body>
+</html>

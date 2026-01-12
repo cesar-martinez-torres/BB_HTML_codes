@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "year": 2026,
+  "periodo": "Primavera (Ene–May)",
+  "allowed_months": "0,1,2,3,4",
+  "header_title": "",
+  "export_lang": "es",
+  "view_year": 2026,
+  "view_month": 1,
+  "selected_date": "2026-01-31",
+  "events": [
+    {
+      "date": "2026-01-05",
+      "type": "Class",
+      "title": "sadasd"
+    },
+    {
+      "date": "2026-01-24",
+      "type": "Class",
+      "title": "asdasd"
+    },
+    {
+      "date": "2026-01-24",
+      "type": "Task",
+      "title": "asdasdadsasda"
+    },
+    {
+      "date": "2026-01-31",
+      "type": "Class",
+      "title": "asdasdasd"
+    }
+  ]
+}

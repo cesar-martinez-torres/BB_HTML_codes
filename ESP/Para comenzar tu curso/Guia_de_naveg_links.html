@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Enlaces Útiles</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    h2 { margin-bottom: 20px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .subsection {
+      border: 1px solid #ccc;
+      padding: 12px 10px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.95rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .subsection:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .orange { background-color: #ffcc80; }
+    .green { background-color: #a5d6a7; }
+    .blue { background-color: #90caf9; }
+  </style>
+</head>
+<body>
+  <h2>🌐 <strong>Enlaces Útiles</strong></h2>
+  <div class="grid">
+    <a class="subsection orange" href="https://github.com/cesar-martinez-torres/Templates_UDLAP" target="_blank">📂 Plantillas Github</a>
+    <a class="subsection green" href="https://github.com/cesar-martinez-torres/LRT2022_Digital_Design" target="_blank">💻 Códigos Github</a>
+    <a class="subsection blue" href="https://biblio.udlap.mx/" target="_blank">📚 Biblioteca UDLAP</a>
+    <a class="subsection orange" href="https://www.overleaf.com/" target="_blank">✍️ Overleaf</a>
+    <a class="subsection green" href="https://www.edaplayground.com/" target="_blank">⚡ EDA Playground</a>
+  </div>
+</body>
+</html>

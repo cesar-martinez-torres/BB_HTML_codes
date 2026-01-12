@@ -1,0 +1,199 @@
+{
+  "version": 5,
+  "year": 2026,
+  "periodo": "Primavera (Ene–May)",
+  "allowed_months": "0,1,2,3,4",
+  "header_title": "",
+  "export_lang": "es",
+  "view_year": 2026,
+  "view_month": 5,
+  "selected_date": "2026-05-01",
+  "events": [
+    {
+      "date": "2026-03-09",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-03-10",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-03-11",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-03-12",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-03-13",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-03-14",
+      "type": "Exam",
+      "title": "Exámenes Parciales 1"
+    },
+    {
+      "date": "2026-05-04",
+      "type": "Exam",
+      "title": "Exámenes Parciales 2"
+    },
+    {
+      "date": "2026-05-05",
+      "type": "Exam",
+      "title": "Exámenes Parciales 2"
+    },
+    {
+      "date": "2026-05-06",
+      "type": "Exam",
+      "title": "Exámenes Parciales 2"
+    },
+    {
+      "date": "2026-05-07",
+      "type": "Exam",
+      "title": "Exámenes Parciales 2"
+    },
+    {
+      "date": "2026-05-08",
+      "type": "Exam",
+      "title": "Exámenes Parciales 2"
+    },
+    {
+      "date": "2026-03-30",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-03-31",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-01",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-02",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-03",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-04",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-05",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-02-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 1"
+    },
+    {
+      "date": "2026-03-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 2"
+    },
+    {
+      "date": "2026-04-12",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 3"
+    },
+    {
+      "date": "2026-05-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 4"
+    },
+    {
+      "date": "2026-01-12",
+      "type": "Info",
+      "title": "Inicio Clases"
+    },
+    {
+      "date": "2026-05-08",
+      "type": "Info",
+      "title": "Fin de Clases"
+    },
+    {
+      "date": "2026-02-02",
+      "type": "Info",
+      "title": "[FESTIVO] Día de la Constitución"
+    },
+    {
+      "date": "2026-03-16",
+      "type": "Info",
+      "title": "[FESTIVO] Natalicio Benito Juárez"
+    },
+    {
+      "date": "2026-05-01",
+      "type": "Info",
+      "title": "[FESTIVO] Día del Trabajo"
+    }
+  ],
+  "semester_start": "2026-01-01",
+  "semester_end": "2026-05-31",
+  "class_weekdays": [
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "default_class_title": "CLASE",
+  "exam_ranges": [
+    {
+      "start": "2026-03-09",
+      "end": "2026-03-14",
+      "label": "Exámenes Parciales 1"
+    },
+    {
+      "start": "2026-05-04",
+      "end": "2026-05-08",
+      "label": "Exámenes Parciales 2"
+    }
+  ],
+  "cutoff_ranges": [
+    {
+      "start": "2026-02-08",
+      "end": "2026-02-08",
+      "label": "Fin Actividades y Tareas 1"
+    },
+    {
+      "start": "2026-03-08",
+      "end": "2026-03-08",
+      "label": "Fin Actividades y Tareas 2"
+    },
+    {
+      "start": "2026-04-12",
+      "end": "2026-04-12",
+      "label": "Fin Actividades y Tareas 3"
+    },
+    {
+      "start": "2026-05-08",
+      "end": "2026-05-08",
+      "label": "Fin Actividades y Tareas 4"
+    }
+  ],
+  "holiday_ranges": [
+    {
+      "start": "2026-03-30",
+      "end": "2026-04-05",
+      "label": "Vacaciones"
+    }
+  ]
+}

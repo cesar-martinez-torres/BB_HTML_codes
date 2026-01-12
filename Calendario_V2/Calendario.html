@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .calendar-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .calendar-nav button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      background-color: #e0e0e0;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+    }
+
+    .calendar-nav span {
+      margin: 0 10px;
+      font-size: 18px;
+      font-weight: bold;
+      min-width: 180px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      width: 14.28%;
+      height: 80px;
+      text-align: center;
+      vertical-align: top;
+      border: 1px solid #ccc;
+      padding: 5px;
+      position: relative; /* for TODAY marker */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .class-day { background-color: #ffcc80; cursor: pointer; }
+    .task-day  { background-color: #a5d6a7; cursor: pointer; }
+    .info-day  { background-color: #90caf9; cursor: pointer; }
+    .exam-day  { background-color: #ef9a9a; cursor: pointer; }
+
+    /* ✅ TODAY indicator */
+    .today {
+      outline: 3px solid #000;
+      outline-offset: -3px;
+      font-weight: bold;
+    }
+
+    .today-marker {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      font-size: 10px;
+      padding: 2px 4px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    .footer-info {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 2px solid #ddd;
+      font-size: 16px;
+    }
+
+    .footer-info p {
+      margin: 5px 0;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 10px #000;
+      position: relative;
+      text-align: left;
+    }
+
+    .popup-content h3 {
+      margin-top: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .icon {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2></h2>
+
+  <div class="calendar-nav">
+    <button id="prevBtn" title="Previous month">&#8592;</button>
+    <button id="todayBtn" title="Go to today">📍</button>
+    <span id="monthYear"></span>
+    <button id="nextBtn" title="Next month">&#8594;</button>
+  </div>
+
+  <table id="calendar">
+    <thead>
+      <tr>
+        <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="footer-info">
+    <p><strong>Next class:</strong> <span id="nextClass">Searching...</span></p>
+    <p><strong>Next task:</strong> <span id="nextTask">Searching...</span></p>
+  </div>
+
+  <!-- Popup -->
+  <div id="popupOverlay" class="popup-overlay">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup()">❌</span>
+      <h3><span id="popupIcon" class="icon">📘</span><span id="popupTitle">Title</span></h3>
+      <p><strong>Date:</strong> <span id="popupDate"></span></p>
+      <p><strong>Type:</strong> <span id="popupType"></span></p>
+    </div>
+  </div>
+
+  <script>
+    // ✅ Test setup: year + allowed months (Jan/Feb/Mar 2026)
+    const year = 2026;
+    const allowedMonths = [0, 1, 2]; // Jan, Feb, Mar
+
+    // ===== Events moved to Jan/Feb/Mar 2026 for testing =====
+    // Mapping used:
+    // 2025-08-xx -> 2026-01-xx
+    // 2025-09-xx -> 2026-02-xx
+    // 2025-10-xx -> 2026-03-xx
+    // 2025-11-xx -> 2026-03-xx
+
+    const classDays = {
+      "2026-01-11": "1.1 Numerical Systems: Decimal, Octal, Hexadecimal and Binary",
+      "2026-01-13": "Lab Introduction",
+      "2026-01-18": "1.2 Binary Codes / 1.3 Operations with Binary Code",
+      "2026-01-20": "Lab 1: Power Supply and Multimeter",
+      "2026-01-25": "1.3 Operations with Binary Code",
+      "2026-01-27": "Lab 1: Power Supply and Multimeter",
+
+      "2026-02-01": "2.1 Basic Logic Gates / 2.2 Logic Gates NOR, NAND and XOR",
+      "2026-02-03": "Lab 2: Basic Logic Gates and Boolean Functions",
+      "2026-02-08": "2.3 Simplifying Logic Functions / 2.4 Minterms / 2.5 Maxterms",
+      "2026-02-10": "Lab 2: Basic Logic Gates and Boolean Functions",
+      "2026-02-15": "2.6 Simplifying using Karnaugh Maps / 2.7 NAND and NOR Design",
+      "2026-02-17": "Lab 3 : Simplifying Boolean Functions",
+      "2026-02-22": "3.1 Definition / 3.2 Analysis and Design / 3.3 Adders / 3.4 Substractors",
+      "2026-02-24": "Lab 4: Basic Combinational Circuits",
+      "2026-02-29": "3.5 Magnitude Comparator / 3.6 Coders and Decoders / 3.7 Multiplexer and Demultiplexer",
+
+      "2026-03-01": "Lab 4: Basic Combinational Circuits",
+      "2026-03-06": "Combinational Design Examples",
+      "2026-03-08": "Lab 5: Combinational Logic Circuits Design",
+      "2026-03-13": "Combinational Design Examples",
+      "2026-03-15": "Lab 5: Combinational Logic Circuits Design",
+      "2026-03-20": "4.1 Definition / 4.2 Synchrone and Asynchrone Design / 4.3 Flip-Flops",
+      "2026-03-22": "Lab 6: Flip Flops",
+      "2026-03-27": "4.3 Flip Flops / 4.4 State Machines",
+      "2026-03-29": "Lab 6: Flip Flops",
+
+      "2026-03-03": "4.4 State Machines",
+      "2026-03-05": "Lab 7: Basic Sequential Logic Circuits",
+      "2026-03-10": "4.5 Sequential Circuit Design",
+      "2026-03-12": "Lab 7: Basic Sequential Logic Circuits",
+      "2026-03-19": "Lab 8: Sequential Logic Circuits Design",
+      "2026-03-24": "4.5 Sequential Circuit Design",
+      "2026-03-26": "Lab 8: Sequential Logic Circuits Design"
+    };
+
+    const taskDays = {
+      "2026-01-31": "Activities Unit 1",
+      "2026-02-21": "Activities Unit 2",
+      "2026-03-12": "Activities Unit 3",
+
+      "2026-02-02": "Lab report 1",
+      "2026-02-16": "Lab report 2",
+      "2026-02-23": "Lab report 3",
+      "2026-03-07": "Lab report 4",
+      "2026-03-21": "Lab report 5",
+      "2026-03-04": "Lab report 6",
+      "2026-03-18": "Lab report 7",
+      "2026-03-26": "Lab report 8"
+    };
+
+    const infoDays = {
+      "2026-03-17": "Día de la Revolución Mexicana (TEST)",
+      "2026-02-13": "End of Activities and Homework 1",
+      "2026-03-11": "End of Activities and Homework 2",
+      "2026-03-08": "End of Activities and Homework 3",
+      "2026-03-28": "End of Activities and Homework 4"
+    };
+
+    const examDays = {
+      "2026-03-06": "First Exam"
+    };
+
+    let currentMonthIndex = 0;
+    const calendarBody = document.querySelector("#calendar tbody");
+    const monthYearEl = document.getElementById("monthYear");
+
+    document.getElementById("prevBtn").addEventListener("click", () => changeMonth(-1));
+    document.getElementById("nextBtn").addEventListener("click", () => changeMonth(1));
+    document.getElementById("todayBtn").addEventListener("click", goToToday);
+
+    function renderCalendar(month) {
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const startDay = firstDay.getDay();
+
+      const monthName = firstDay.toLocaleString('en-US', { month: 'long' }).toUpperCase();
+      monthYearEl.textContent = `${monthName} ${year}`;
+      calendarBody.innerHTML = "";
+
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+      let row = document.createElement("tr");
+      let dayCounter = 1;
+
+      for (let i = 0; i < 42; i++) {
+        const cell = document.createElement("td");
+
+        if (i >= startDay && dayCounter <= lastDay.getDate()) {
+          const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
+          cell.textContent = dayCounter;
+
+          // ✅ Mark TODAY
+          if (dateKey === todayKey) {
+            cell.classList.add("today");
+            const tag = document.createElement("div");
+            tag.className = "today-marker";
+            tag.textContent = "TODAY";
+            cell.appendChild(tag);
+          }
+
+          const eventMap = [
+            { data: classDays, css: "class-day", icon: "📘", label: "Class" },
+            { data: taskDays,  css: "task-day",  icon: "📎", label: "Task" },
+            { data: infoDays,  css: "info-day",  icon: "🗓️", label: "Info"  },
+            { data: examDays,  css: "exam-day",  icon: "📝", label: "Exam" }
+          ];
+
+          // Color the cell if it has events (can accumulate classes)
+          for (const { data, css } of eventMap) {
+            if (data[dateKey]) cell.classList.add(css);
+          }
+
+          // Keep popup simple: choose one event by priority
+          const priority = [
+            { data: examDays, icon: "📝", label: "Exam" },
+            { data: taskDays, icon: "📎", label: "Task" },
+            { data: classDays, icon: "📘", label: "Class" },
+            { data: infoDays, icon: "🗓️", label: "Info" }
+          ];
+
+          for (const { data, icon, label } of priority) {
+            if (data[dateKey]) {
+              cell.title = `${label}: ${data[dateKey]}`;
+              cell.style.cursor = "pointer";
+              cell.addEventListener("click", () => showPopup(dateKey, label, data[dateKey], icon));
+              break;
+            }
+          }
+
+          dayCounter++;
+        } else {
+          cell.innerHTML = "&nbsp;";
+        }
+
+        row.appendChild(cell);
+        if ((i + 1) % 7 === 0) {
+          calendarBody.appendChild(row);
+          row = document.createElement("tr");
+        }
+      }
+
+      updateNextEvents();
+    }
+
+    function formatDate(dateStr) {
+      const [y, m, d] = dateStr.split("-");
+      const date = new Date(y, m - 1, d);
+      return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function showPopup(dateStr, type, title, icon) {
+      document.getElementById("popupDate").textContent = formatDate(dateStr);
+      document.getElementById("popupType").textContent = type;
+      document.getElementById("popupTitle").textContent = title;
+      document.getElementById("popupIcon").textContent = icon;
+      document.getElementById("popupOverlay").style.display = "flex";
+    }
+
+    function closePopup() {
+      document.getElementById("popupOverlay").style.display = "none";
+    }
+
+    function changeMonth(direction) {
+      currentMonthIndex += direction;
+      if (currentMonthIndex < 0) currentMonthIndex = 0;
+      if (currentMonthIndex >= allowedMonths.length) currentMonthIndex = allowedMonths.length - 1;
+      renderCalendar(allowedMonths[currentMonthIndex]);
+      closePopup();
+    }
+
+    function goToToday() {
+      const now = new Date();
+      const currentMonth = now.getMonth(); // 0..11
+      const idx = allowedMonths.indexOf(currentMonth);
+
+      if (idx !== -1) {
+        currentMonthIndex = idx;
+        renderCalendar(allowedMonths[currentMonthIndex]);
+        closePopup();
+      } else {
+        alert("Today is outside the allowed calendar range.");
+      }
+    }
+
+    function updateNextEvents() {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      function findNext(map) {
+        const dates = Object.keys(map)
+          .filter(date => new Date(date) >= today)
+          .sort();
+        if (!dates.length) return null;
+        const d = dates[0];
+        return { date: d, title: map[d] };
+      }
+
+      const nextClass = findNext(classDays);
+      const nextTask = findNext(taskDays);
+
+      document.getElementById("nextClass").textContent = nextClass
+        ? `${formatDate(nextClass.date)} - ${nextClass.title}`
+        : "No upcoming classes";
+
+      document.getElementById("nextTask").textContent = nextTask
+        ? `${formatDate(nextTask.date)} - ${nextTask.title}`
+        : "No upcoming tasks";
+    }
+
+    // Initial render
+    renderCalendar(allowedMonths[currentMonthIndex]);
+  </script>
+
+</body>
+</html>

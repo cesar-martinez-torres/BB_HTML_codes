@@ -1,0 +1,339 @@
+{
+  "version": 5,
+  "year": 2026,
+  "periodo": "Primavera (Ene–May)",
+  "allowed_months": "0,1,2,3,4",
+  "header_title": "Cinemática y Dinámica de Robots",
+  "export_lang": "es",
+  "view_year": 2026,
+  "view_month": 4,
+  "selected_date": "2026-04-26",
+  "events": [
+    {
+      "date": "2026-03-11",
+      "type": "Exam",
+      "title": "Parcial 1"
+    },
+    {
+      "date": "2026-03-30",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-03-31",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-01",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-02",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-03",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-04",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-04-05",
+      "type": "Info",
+      "title": "[VACACIONES] Vacaciones"
+    },
+    {
+      "date": "2026-02-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 1"
+    },
+    {
+      "date": "2026-03-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 2"
+    },
+    {
+      "date": "2026-04-12",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 3"
+    },
+    {
+      "date": "2026-05-08",
+      "type": "Info",
+      "title": "[CIERRE] Fin Actividades y Tareas 4"
+    },
+    {
+      "date": "2026-01-12",
+      "type": "Info",
+      "title": "Inicio Clases"
+    },
+    {
+      "date": "2026-05-08",
+      "type": "Info",
+      "title": "Fin de Clases"
+    },
+    {
+      "date": "2026-02-02",
+      "type": "Info",
+      "title": "[FESTIVO] Día de la Constitución"
+    },
+    {
+      "date": "2026-03-16",
+      "type": "Info",
+      "title": "[FESTIVO] Natalicio Benito Juárez"
+    },
+    {
+      "date": "2026-05-01",
+      "type": "Info",
+      "title": "[FESTIVO] Día del Trabajo"
+    },
+    {
+      "date": "2026-01-12",
+      "type": "Class",
+      "title": "1.1 Introducción"
+    },
+    {
+      "date": "2026-01-14",
+      "type": "Class",
+      "title": "1.1 Introducción / 1.2 Partes de un brazo robótico"
+    },
+    {
+      "date": "2026-01-19",
+      "type": "Class",
+      "title": "1.3 Pose de un objeto"
+    },
+    {
+      "date": "2026-01-21",
+      "type": "Class",
+      "title": "1.3 Pose de un objeto"
+    },
+    {
+      "date": "2026-01-26",
+      "type": "Class",
+      "title": "1.3 Pose de un objeto"
+    },
+    {
+      "date": "2026-01-28",
+      "type": "Class",
+      "title": "1.3 Pose de un objeto"
+    },
+    {
+      "date": "2026-02-04",
+      "type": "Class",
+      "title": "2.1 Introducción / 2.2 Cinemática directa"
+    },
+    {
+      "date": "2026-02-09",
+      "type": "Class",
+      "title": "2.2 Cinemática directa"
+    },
+    {
+      "date": "2026-02-11",
+      "type": "Class",
+      "title": "2.2 Cinemática directa"
+    },
+    {
+      "date": "2026-02-16",
+      "type": "Class",
+      "title": "2.2 Cinemática directa"
+    },
+    {
+      "date": "2026-02-18",
+      "type": "Class",
+      "title": "2.2 Cinemática directa"
+    },
+    {
+      "date": "2026-02-23",
+      "type": "Class",
+      "title": "2.3 Cinemática inversa"
+    },
+    {
+      "date": "2026-02-25",
+      "type": "Class",
+      "title": "2.3 Cinemática inversa"
+    },
+    {
+      "date": "2026-03-02",
+      "type": "Class",
+      "title": "2.3 Cinemática inversa"
+    },
+    {
+      "date": "2026-03-04",
+      "type": "Class",
+      "title": "2.3 Cinemática inversa"
+    },
+    {
+      "date": "2026-03-09",
+      "type": "Class",
+      "title": "3.1 Introducción"
+    },
+    {
+      "date": "2026-03-18",
+      "type": "Class",
+      "title": "3.2 Matriz Jacobiana"
+    },
+    {
+      "date": "2026-03-23",
+      "type": "Class",
+      "title": "3.4 Singularidades"
+    },
+    {
+      "date": "2026-03-25",
+      "type": "Class",
+      "title": "3.4 Singularidades"
+    },
+    {
+      "date": "2026-04-06",
+      "type": "Class",
+      "title": "4.1 Introducción"
+    },
+    {
+      "date": "2026-04-08",
+      "type": "Class",
+      "title": "4.2 Formulación de Newton-Euler"
+    },
+    {
+      "date": "2026-04-13",
+      "type": "Class",
+      "title": "4.2 Formulación de Newton-Euler"
+    },
+    {
+      "date": "2026-04-15",
+      "type": "Class",
+      "title": "4.3 Modelo dinámico de robots manipuladores"
+    },
+    {
+      "date": "2026-04-20",
+      "type": "Class",
+      "title": "4.3 Modelo dinámico de robots manipuladores"
+    },
+    {
+      "date": "2026-04-22",
+      "type": "Class",
+      "title": "5.1 Introducción"
+    },
+    {
+      "date": "2026-04-27",
+      "type": "Class",
+      "title": "5.2 Generación de trayectorias"
+    },
+    {
+      "date": "2026-04-29",
+      "type": "Class",
+      "title": "5.3 Control en el espacio articular"
+    },
+    {
+      "date": "2026-05-04",
+      "type": "Class",
+      "title": "5.4 Control en el espacio operacional"
+    },
+    {
+      "date": "2026-05-06",
+      "type": "Exam",
+      "title": "Parcial 2"
+    },
+    {
+      "date": "2026-01-18",
+      "type": "Task",
+      "title": "Tarea 1.1"
+    },
+    {
+      "date": "2026-02-01",
+      "type": "Task",
+      "title": "Tarea 1.2"
+    },
+    {
+      "date": "2026-02-22",
+      "type": "Task",
+      "title": "Tarea 2.1"
+    },
+    {
+      "date": "2026-03-08",
+      "type": "Task",
+      "title": "Tarea 2.2"
+    },
+    {
+      "date": "2026-03-29",
+      "type": "Task",
+      "title": "Tarea 3.1"
+    },
+    {
+      "date": "2026-03-22",
+      "type": "Task",
+      "title": "Lab 1"
+    },
+    {
+      "date": "2026-04-19",
+      "type": "Task",
+      "title": "Tarea 4.1"
+    },
+    {
+      "date": "2026-05-03",
+      "type": "Task",
+      "title": "Tarea 5.1"
+    },
+    {
+      "date": "2026-04-26",
+      "type": "Task",
+      "title": "Lab 2"
+    }
+  ],
+  "semester_start": "2026-01-01",
+  "semester_end": "2026-05-31",
+  "class_weekdays": [
+    true,
+    false,
+    true,
+    false,
+    false
+  ],
+  "default_class_title": "Clase",
+  "exam_ranges": [
+    {
+      "start": "2026-03-09",
+      "end": "2026-03-14",
+      "label": "Exámenes Parciales 1"
+    },
+    {
+      "start": "2026-05-04",
+      "end": "2026-05-08",
+      "label": "Exámenes Parciales 2"
+    }
+  ],
+  "cutoff_ranges": [
+    {
+      "start": "2026-02-08",
+      "end": "2026-02-08",
+      "label": "Fin Actividades y Tareas 1"
+    },
+    {
+      "start": "2026-03-08",
+      "end": "2026-03-08",
+      "label": "Fin Actividades y Tareas 2"
+    },
+    {
+      "start": "2026-04-12",
+      "end": "2026-04-12",
+      "label": "Fin Actividades y Tareas 3"
+    },
+    {
+      "start": "2026-05-08",
+      "end": "2026-05-08",
+      "label": "Fin Actividades y Tareas 4"
+    }
+  ],
+  "holiday_ranges": [
+    {
+      "start": "2026-03-30",
+      "end": "2026-04-05",
+      "label": "Vacaciones"
+    }
+  ]
+}

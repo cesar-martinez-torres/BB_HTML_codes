@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Esquema de Evaluación</title>
+  <title></title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -50,7 +50,7 @@
 <body>
   <div class="infographic">
     <section class="section" id="grading">
-      <h2>Esquema de Evaluación</h2>
+      <h2></h2>
       <div class="chart-container">
         <canvas id="gradingChart"></canvas>
       </div>
@@ -62,10 +62,10 @@
     new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: ['Primer Parcial', 'Segundo Parcial', 'Actividades y Tareas (cuatro periodos)', 'Proyecto Final'],
+        labels: ['First Exam', 'Second Exam', 'Individual Essay', 'Activities (Four Periods)', 'Final Project'],
         datasets: [{
-          data: [20, 20, 40, 20],
-          backgroundColor: ['#0073e6', '#e67e22', '#2ecc71', '#e74c3c'],
+          data: [15, 15, 10, 20, 40],
+          backgroundColor: ['#0073e6', '#e67e22', '#2ecc71', '#e74c3c', '#f39c12'],
         }]
       },
       options: {
